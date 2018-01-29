@@ -15,12 +15,11 @@ freeipa_server_install:
         --admin-password {{ server.admin.password }}
         --ssh-trust-dns
         {%- if not server.get('ntp', {}).get('enabled', True) %} --no-ntp{%- endif %}
-        {%- if server.get('dns', {}).get('enabled', True) %} --setup-dns
+        {%- if server.get('dns', {}).get('enabled', True) %} --setup-dns --auto-reverse
         {%- if server.get('dns', {}).get('zonemgr', False) %} --zonemgr {{ server.dns.zonemgr }}{%- endif %}
         {%- if server.get('dns', {}).get('forwarders', []) %}{%- for forwarder in server.dns.forwarders %} --forwarder={{ forwarder }}{%- endfor %}{%- else %} --no-forwarders{%- endif %}
         {%- endif %}
         {%- if server.get('mkhomedir', True) %} --mkhomedir{%- endif %}
-        --auto-reverse
         --no-host-dns
         --unattended
     - creates: /etc/ipa/default.conf
